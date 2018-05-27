@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  ccbdb:
+    hostname: ccb
+    build: ./db
+    ports:
+       - "1521:1521"
+       - "1158:1158"
+  ccbapp:
+    hostname: ccbapp
+    build: ./app
+    ports:
+       - "6500:6500"
+    depends_on:
+       - ccbdb
+    command: ["./wait-for-oracle.sh", "ccbdb:1521","cisadm/cisadm", "./startApp.sh"]
